@@ -1,0 +1,30 @@
+@import "tailwindcss";
+
+@theme {
+    /* Qora + oltin: premium atir uslubi */
+    --color-brand: #1c1c1c;
+    --color-brand-hover: #000000;
+    --color-brand-soft: #f2efe9;
+
+    --color-gold: #b8915a;
+    --color-gold-soft: #f6efe4;
+
+    --color-ink: #1c1c1c;
+    --color-muted: #6b6b6b;
+
+    --color-surface: #faf9f7;
+    --color-hero: #f4f1ec;
+    --color-line: #e7e3dd;
+}
+
+/* Element Plus ranglarini ham moslashtirish
+   (:root:root — lazy yuklanadigan Element Plus stillaridan ustun bo‘lishi uchun) */
+:root:root {
+    --el-color-primary: #1c1c1c;
+    --el-color-primary-dark-2: #000000;
+    --el-color-primary-light-3: #606060;
+    --el-color-primary-light-5: #8e8e8e;
+    --el-color-primary-light-7: #bbbbbb;
+    --el-color-primary-light-8: #d2d2d2;
+    --el-color-primary-light-9: #f2efe9;
+}

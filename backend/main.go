@@ -1,0 +1,73 @@
+package main
+
+import (
+	"context"
+	"errors"
+	"log"
+	"net/http"
+	"os"
+	"os/signal"
+	"syscall"
+	"time"
+
+	"parfume/backend/internal/api"
+	"parfume/backend/internal/assistant"
+	"parfume/backend/internal/auth"
+	"parfume/backend/internal/config"
+	"parfume/backend/internal/database"
+	"parfume/backend/internal/store"
+)
+
+func main() {
+	cfg := config.Load()
+	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
+	defer stop()
+
+	pool, err := database.Connect(ctx, cfg.DatabaseURL)
+	if err != nil {
+		log.Fatalf("database: %v", err)
+	}
+	defer pool.Close()
+
+	if err := database.Migrate(ctx, pool); err != nil {
+		log.Fatalf("migrate: %v", err)
+	}
+	if err := database.Seed(ctx, pool); err != nil {
+		log.Fatalf("seed: %v", err)
+	}
+
+	st := store.New(pool)
+	if err := st.EnsureAdmin(ctx, cfg.AdminUsername, cfg.AdminPassword); err != nil {
+		log.Fatalf("ensure admin: %v", err)
+	}
+
+	if err := os.MkdirAll(cfg.UploadDir, 0o755); err != nil {
+		log.Fatalf("upload dir: %v", err)
+	}
+
+	srv := &http.Server{
+		Addr: ":" + cfg.Port,
+		Handler: api.NewRouter(api.Options{
+			Store:       st,
+			Auth:        auth.NewManager(cfg.JWTSecret),
+			Assistant:   assistant.New(st, cfg.OpenAIAPIKey, cfg.OpenAIModel),
+			UploadDir:   cfg.UploadDir,
+			StaticDir:   cfg.StaticDir,
+			CORSOrigins: cfg.CORSOrigins,
+		}),
+		ReadHeaderTimeout: 10 * time.Second,
+	}
+
+	go func() {
+		log.Printf("API listening on http://localhost:%s", cfg.Port)
+		if err := srv.ListenAndServe(); err != nil && !errors.Is(err, http.ErrServerClosed) {
+			log.Fatalf("server: %v", err)
+		}
+	}()
+
+	<-ctx.Done()
+	shutdownCtx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+	_ = srv.Shutdown(shutdownCtx)
+	log.Println("server stopped")
+}

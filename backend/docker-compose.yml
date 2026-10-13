@@ -1,0 +1,16 @@
+services:
+  db:
+    image: postgres:17
+    container_name: parfume-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: parfume
+      POSTGRES_PASSWORD: parfume
+      POSTGRES_DB: parfume
+    ports:
+      - "5442:5432"
+    volumes:
+      - parfume-pgdata:/var/lib/postgresql/data
+
+volumes:
+  parfume-pgdata:
