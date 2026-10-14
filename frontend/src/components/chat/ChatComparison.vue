@@ -28,6 +28,7 @@ const rows = computed(() => {
             values: ps.map((p) => (p.min_price !== null ? t('product.priceFrom', { price: price(p.min_price) }) : t('product.outOfStock'))),
         },
         { label: t('chat.compare.gender'), values: ps.map((p) => perfume.gender(p.gender)) },
+        { label: t('chat.compare.tier'), values: ps.map((p) => perfume.tier(p.tier) || '—') },
         { label: t('chat.compare.concentration'), values: ps.map((p) => perfume.concentration(p.concentration)) },
         { label: t('chat.compare.notes'), values: ps.map(notes) },
         ...props.comparison.rows,

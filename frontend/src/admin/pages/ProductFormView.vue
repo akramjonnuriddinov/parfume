@@ -7,7 +7,7 @@ import { ElMessage, type FormInstance } from 'element-plus'
 import { Delete, Plus } from '@element-plus/icons-vue'
 import { adminApi } from '../../api/admin'
 import { publicApi } from '../../api/public'
-import { CONCENTRATIONS, GENDERS, type Category, type ProductInput, type VariantInput } from '../../api/types'
+import { CONCENTRATIONS, GENDERS, TIERS, type Category, type ProductInput, type VariantInput } from '../../api/types'
 import { useLocalized } from '../../utils/useLocalized'
 import { usePerfume } from '../../utils/usePerfume'
 import AdminCard from '../components/AdminCard.vue'
@@ -41,6 +41,7 @@ const form = reactive<ProductInput>({
     brand: '',
     gender: 'unisex',
     concentration: 'edp',
+    tier: '',
     notes_top: '',
     notes_heart: '',
     notes_base: '',
@@ -81,6 +82,7 @@ onMounted(async () => {
             brand: p.brand,
             gender: p.gender,
             concentration: p.concentration,
+            tier: p.tier,
             notes_top: p.notes_top,
             notes_heart: p.notes_heart,
             notes_base: p.notes_base,
@@ -217,6 +219,18 @@ async function submit(): Promise<void> {
                                     :label="perfume.concentration(c)"
                                 />
                             </el-select>
+                        </el-form-item>
+                        <el-form-item :label="t('admin.products.tier')">
+                            <el-radio-group v-model="form.tier">
+                                <el-radio-button value="">{{ t('admin.products.tierNone') }}</el-radio-button>
+                                <el-radio-button
+                                    v-for="x in TIERS"
+                                    :key="x"
+                                    :value="x"
+                                >
+                                    {{ perfume.tier(x) }}
+                                </el-radio-button>
+                            </el-radio-group>
                         </el-form-item>
                     </div>
                 </AdminCard>

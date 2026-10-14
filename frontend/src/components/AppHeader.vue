@@ -1,5 +1,6 @@
 <!-- AppHeader.vue -->
 <script setup lang="ts">
+import AppLogo from './AppLogo.vue'
 import { computed, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
@@ -31,7 +32,6 @@ const links = computed(() => [
     { label: t('nav.catalog'), to: '/catalog' },
     { label: t('nav.women'), to: '/catalog?gender=women' },
     { label: t('nav.men'), to: '/catalog?gender=men' },
-    { label: t('nav.unisex'), to: '/catalog?gender=unisex' },
     { label: t('nav.about'), to: '/about' },
     { label: t('nav.delivery'), to: '/delivery' },
     { label: t('nav.contact'), to: '/contact' },
@@ -54,25 +54,7 @@ function submitSearch(): void {
                 class="mr-auto inline-flex shrink-0 items-center gap-2.5 rounded-md text-ink focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand lg:mr-0"
                 :aria-label="t('header.homeLabel')"
             >
-                <span
-                    class="flex size-10 items-center justify-center rounded-xl bg-brand text-gold"
-                    aria-hidden="true"
-                >
-                    <svg
-                        class="size-6"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="1.6"
-                        stroke-linecap="round"
-                    >
-                        <path d="M9.5 3h5v3.5h-5zM10.5 6.5v2M13.5 6.5v2M7 9h10a1.5 1.5 0 0 1 1.5 1.5v9A1.5 1.5 0 0 1 17 21H7a1.5 1.5 0 0 1-1.5-1.5v-9A1.5 1.5 0 0 1 7 9ZM9 15h6" />
-                    </svg>
-                </span>
-
-                <span class="text-2xl font-semibold tracking-tight">
-                    Parfume<span class="text-gold"> Shop</span>
-                </span>
+                <AppLogo height="h-11 sm:h-14" />
             </RouterLink>
 
             <!-- Qidiruv -->

@@ -1,5 +1,6 @@
 <!-- AdminLayout.vue -->
 <script setup lang="ts">
+import AppLogo from '../../components/AppLogo.vue'
 import { computed, onMounted, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
@@ -77,12 +78,7 @@ function onCommand(command: string | number | object): void {
                 to="/admin"
                 class="flex h-[72px] shrink-0 items-center gap-2.5 border-b border-line px-6 text-ink"
             >
-                <span class="flex size-9 items-center justify-center rounded-xl bg-brand text-gold" aria-hidden="true">
-                    <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
-                        <path d="M9.5 3h5v3.5h-5zM10.5 6.5v2M13.5 6.5v2M7 9h10a1.5 1.5 0 0 1 1.5 1.5v9A1.5 1.5 0 0 1 17 21H7a1.5 1.5 0 0 1-1.5-1.5v-9A1.5 1.5 0 0 1 7 9ZM9 15h6" />
-                    </svg>
-                </span>
-                <span class="text-lg font-semibold tracking-tight whitespace-nowrap">Parfume<span class="text-gold"> Shop</span></span>
+                <AppLogo height="h-10" />
                 <span class="ml-auto rounded-md bg-surface px-1.5 py-0.5 text-[10px] font-medium tracking-wide text-muted uppercase">
                     Admin
                 </span>

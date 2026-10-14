@@ -2,20 +2,19 @@ import type { Messages } from './uz'
 
 const en: Messages = {
     meta: {
-        tagline: 'original perfumes, bottles and decants',
+        tagline: 'premium perfumes, bottles and decants',
     },
     nav: {
         home: 'Home',
         catalog: 'Catalog',
         women: 'For women',
         men: 'For men',
-        unisex: 'Unisex',
         about: 'About us',
         delivery: 'Delivery',
         contact: 'Contact',
     },
     header: {
-        homeLabel: 'Parfume Shop — home',
+        homeLabel: 'Mariana Parfumes — home',
         searchPlaceholder: 'Perfume, brand or note (e.g. vanilla)',
         search: 'Search',
         consultation: 'Help choosing a scent',
@@ -27,7 +26,7 @@ const en: Messages = {
         mobileMenu: 'Mobile menu',
     },
     footer: {
-        about: 'Original perfumes: a full bottle or a decant to try first. Fast delivery across Tashkent.',
+        about: 'Premium-quality perfumes: a bottle or a decant to try first. Delivery across Uzbekistan.',
         information: 'Information',
         telegram: 'Message us on Telegram',
     },
@@ -37,7 +36,19 @@ const en: Messages = {
         gender: {
             women: 'For women',
             men: 'For men',
-            unisex: 'Unisex',
+            unisex: 'For him and her',
+        },
+        tier: {
+            premium: 'Premium',
+            standart: 'Standard',
+            luxcopy: 'Lux copy',
+            tester: 'Tester',
+        },
+        tierInfo: {
+            premium: 'Our top tier: true-to-the-original scent with strong longevity.',
+            standart: 'An affordable option: slightly below premium, noticeably cheaper.',
+            luxcopy: 'A great gift: bottle and packaging modelled on the original.',
+            tester: 'Unboxed bottle at a lower price.',
         },
         concentration: {
             edp: 'Eau de Parfum',
@@ -89,8 +100,8 @@ const en: Messages = {
         volume: 'Volume',
         chooseVolume: 'Choose a volume',
         priceFrom: 'from {price}',
-        decantHint: 'A decant is a small amount poured from the original bottle. Wear it for a few days, then buy the full bottle.',
-        perkOriginal: 'Only originals from official suppliers',
+        decantHint: 'A decant is a small 6–10 ml size. Wear it for a few days, then buy a bigger bottle.',
+        perkOriginal: 'Quality tier shown upfront: Premium, Standard or Lux copy',
         perkDelivery: '1-day delivery across Tashkent',
         notes: 'Fragrance pyramid',
         notesTop: 'Top notes',
@@ -127,9 +138,9 @@ const en: Messages = {
     },
     home: {
         hero: {
-            eyebrow: 'House of original perfumes',
-            title: 'Your scent is your signature.',
-            text: 'The world’s best-loved perfumes: a full bottle or a 5–10 ml decant to try first.',
+            eyebrow: 'House of premium perfumes',
+            title: 'Art and quality in every drop',
+            text: 'The world’s best-loved perfumes: a full bottle or a 6–10 ml decant to try first.',
             cta: 'Browse the catalog',
             decants: 'What is a decant?',
         },
@@ -137,7 +148,6 @@ const en: Messages = {
             title: 'Who are you choosing for?',
             women: 'For women',
             men: 'For men',
-            unisex: 'Unisex',
             cta: 'Browse',
         },
         categories: {
@@ -151,7 +161,7 @@ const en: Messages = {
         decant: {
             eyebrow: 'Decants',
             title: 'Try it first, then buy the bottle',
-            text: 'A decant is 5–10 ml poured from the original bottle into a sterile atomiser. Affordable, compact and easy to carry.',
+            text: 'A decant is 6–10 ml of perfume in a sterile atomiser. Affordable, compact and easy to carry.',
             cta: 'Choose decants',
             steps: {
                 choose: { title: 'Choose', text: 'Pick decants of 2–3 scents you like.' },
@@ -175,10 +185,11 @@ const en: Messages = {
         gender: 'For',
         brand: 'Brand',
         allBrands: 'All brands',
+        tier: 'Quality',
+        allTiers: 'Any quality',
         forGender: {
             women: 'Women’s perfumes',
             men: 'Men’s perfumes',
-            unisex: 'Unisex perfumes',
         },
         searchResults: 'Results for “{q}”',
         found: 'Found: {n}',
@@ -213,10 +224,10 @@ const en: Messages = {
     },
     about: {
         title: 'About us',
-        lead: 'Parfume Shop sells the world’s best-known perfumes as full bottles and decants.',
+        lead: 'Mariana Parfumes sells the world’s best-known perfumes as full bottles and decants.',
         missionTitle: 'A scent for everyone',
         missionText:
-            'A good perfume shouldn’t be an expensive mistake. That’s why every scent is available as a decant, we help you choose, and we only sell originals.',
+            'A good perfume shouldn’t be an expensive mistake. That’s why every scent is available as a decant, we help you choose, and we’re upfront about each scent’s quality tier.',
         stats: [
             { value: '150+', label: 'perfumes' },
             { value: '5–10 ml', label: 'decant size' },
@@ -224,7 +235,7 @@ const en: Messages = {
         ],
         valuesTitle: 'Why customers choose us',
         values: [
-            { title: 'Originals only', text: 'Perfumes from official distributors, with batch codes.' },
+            { title: 'Honest quality', text: 'Premium, Standard or Lux copy — you always know what you’re buying.' },
             { title: 'Try first', text: 'Every scent has a decant, so you can try before buying a bottle.' },
             { title: 'Personal advice', text: 'Our fragrance specialist will find the scent that suits you.' },
             { title: 'Gift wrapping', text: 'We wrap beautifully for holidays and gifts.' },
@@ -288,9 +299,9 @@ const en: Messages = {
     chat: {
         launcher: 'AI consultant',
         open: 'Open the AI consultant',
-        title: 'Parfume Shop consultant',
+        title: 'Mariana Parfumes consultant',
         subtitle: 'AI · helps you choose a scent and order',
-        greeting: 'Hello! I’m the Parfume Shop AI consultant. Tell me who it’s for and what kind of scent you like — I’ll find matching perfumes and add them to your cart if you wish.',
+        greeting: 'Hello! I’m the Mariana Parfumes AI consultant. Tell me who it’s for and what kind of scent you like — I’ll find matching perfumes and add them to your cart if you wish.',
         suggestionsTitle: 'Try asking:',
         suggestions: {
             gift: 'A sweet perfume as a gift for my wife, under 1M UZS',
@@ -324,6 +335,7 @@ const en: Messages = {
             price: 'Price',
             gender: 'For',
             concentration: 'Concentration',
+            tier: 'Quality',
             notes: 'Notes',
         },
         order: {
@@ -440,6 +452,8 @@ const en: Messages = {
             brandPlaceholder: 'e.g. Dior',
             gender: 'For',
             concentration: 'Concentration',
+            tier: 'Quality tier',
+            tierNone: 'Not set',
             variants: 'Volumes and prices',
             variantsHint: 'Each volume is sold separately: a full bottle or a decant (5–10 ml).',
             variantsRequired: 'Add at least one volume',

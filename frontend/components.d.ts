@@ -13,6 +13,7 @@ declare module 'vue' {
   export interface GlobalComponents {
     AppFooter: typeof import('./src/components/AppFooter.vue')['default']
     AppHeader: typeof import('./src/components/AppHeader.vue')['default']
+    AppLogo: typeof import('./src/components/AppLogo.vue')['default']
     CartDrawer: typeof import('./src/components/CartDrawer.vue')['default']
     ChatComparison: typeof import('./src/components/chat/ChatComparison.vue')['default']
     ChatOrderCard: typeof import('./src/components/chat/ChatOrderCard.vue')['default']

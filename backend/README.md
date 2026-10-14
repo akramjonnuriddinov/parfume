@@ -1,4 +1,4 @@
-# Parfume Shop API (Go + PostgreSQL)
+# Mariana Parfumes API (Go + PostgreSQL)
 
 ```bash
 docker compose up -d   # PostgreSQL 17 -> localhost:5442 (user/pass/db: parfume)

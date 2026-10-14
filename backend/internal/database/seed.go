@@ -131,9 +131,9 @@ var seedProducts = []seedProduct{
 
 var seedSettings = map[string]string{
 	"phone":         "+998 90 777 40 40",
-	"email":         "info@parfumeshop.uz",
-	"telegram_url":  "https://t.me/parfumeshop_uz",
-	"instagram_url": "https://instagram.com/parfumeshop.uz",
+	"email":         "info@marianaparfumes.uz",
+	"telegram_url":  "https://t.me/marianaparfumes",
+	"instagram_url": "https://instagram.com/marianaparfumes",
 	"address_uz":    "Toshkent sh., Yunusobod tumani, Amir Temur ko‘chasi, 107",
 	"address_ru":    "г. Ташкент, Юнусабадский район, ул. Амира Темура, 107",
 	"address_en":    "107 Amir Temur street, Yunusabad district, Tashkent",

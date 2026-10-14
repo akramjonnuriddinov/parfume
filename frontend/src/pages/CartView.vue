@@ -100,7 +100,7 @@ async function submit(): Promise<void> {
 
             <div
                 v-else
-                class="grid gap-8 lg:grid-cols-[1fr_400px] lg:gap-10"
+                class="grid grid-cols-1 gap-8 lg:grid-cols-[minmax(0,1fr)_400px] lg:gap-10"
             >
                 <!-- Mahsulotlar ro‘yxati -->
                 <section :aria-label="t('cart.title')">

@@ -1,5 +1,6 @@
 <!-- AppFooter.vue -->
 <script setup lang="ts">
+import AppLogo from './AppLogo.vue'
 import { computed, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useCategoriesStore } from '../stores/categories'
@@ -40,25 +41,7 @@ const informationLinks = computed(() => [
                         class="inline-flex items-center gap-2.5 rounded text-ink focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand"
                         :aria-label="t('header.homeLabel')"
                     >
-                        <span
-                            class="flex size-10 items-center justify-center rounded-xl bg-brand text-gold"
-                            aria-hidden="true"
-                        >
-                            <svg
-                                class="size-6"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="currentColor"
-                                stroke-width="1.6"
-                                stroke-linecap="round"
-                            >
-                                <path d="M9.5 3h5v3.5h-5zM10.5 6.5v2M13.5 6.5v2M7 9h10a1.5 1.5 0 0 1 1.5 1.5v9A1.5 1.5 0 0 1 17 21H7a1.5 1.5 0 0 1-1.5-1.5v-9A1.5 1.5 0 0 1 7 9ZM9 15h6" />
-                            </svg>
-                        </span>
-
-                        <span class="text-2xl font-semibold tracking-tight">
-                            Parfume<span class="text-gold"> Shop</span>
-                        </span>
+                        <AppLogo height="h-14" />
                     </RouterLink>
 
                     <p class="mt-4 max-w-64 text-sm leading-6 text-muted">
@@ -152,7 +135,7 @@ const informationLinks = computed(() => [
                 class="flex flex-col gap-3 border-t border-line py-5 text-xs leading-5 text-muted sm:flex-row sm:items-center sm:justify-between"
             >
                 <p>
-                    © {{ currentYear }} Parfume Shop
+                    © {{ currentYear }} Mariana Parfumes
                 </p>
 
                 <RouterLink

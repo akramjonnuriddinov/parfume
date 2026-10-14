@@ -69,7 +69,7 @@ watch(() => route.params.id as string, (id) => id && load(id), { immediate: true
 
 watch([name, locale], () => {
     if (name.value && product.value) {
-        document.title = `${product.value.brand} ${name.value} — Parfume Shop`
+        document.title = `${product.value.brand} ${name.value} — Mariana Parfumes`
     }
 })
 
@@ -143,7 +143,8 @@ function buyNow(): void {
                         :alt="`${product.brand} ${name}`"
                         eager
                     />
-                    <span class="absolute top-4 left-4 rounded-md bg-white px-2.5 py-1 text-xs font-medium text-muted">
+                    <span v-if="product.gender !== 'unisex'"
+                        class="absolute top-4 left-4 rounded-md bg-white px-2.5 py-1 text-xs font-medium text-muted">
                         {{ perfume.gender(product.gender) }}
                     </span>
                 </div>
@@ -162,6 +163,15 @@ function buyNow(): void {
                     <p class="mt-3 text-sm text-muted">
                         {{ perfume.concentration(product.concentration) }}
                         <template v-if="product.category"> · {{ tr(product.category) }}</template>
+                    </p>
+                    <p
+                        v-if="product.tier"
+                        class="mt-4 flex items-start gap-3 rounded-xl bg-gold-soft px-4 py-3 text-sm text-ink"
+                    >
+                        <span class="shrink-0 rounded border border-gold/50 bg-white px-2 py-0.5 text-xs font-semibold tracking-wide uppercase">
+                            {{ perfume.tier(product.tier) }}
+                        </span>
+                        <span class="leading-6">{{ perfume.tierInfo(product.tier) }}</span>
                     </p>
 
                     <div class="mt-8 rounded-2xl border border-line p-5 sm:p-6">

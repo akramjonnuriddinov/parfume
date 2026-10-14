@@ -198,7 +198,7 @@ router.afterEach((to) => sessionStorage.removeItem(`chunk-reload:${to.fullPath}`
 export function applyDocumentTitle(): void {
     const route = router.currentRoute.value
     const t = i18n.global.t
-    const base = 'Parfume Shop'
+    const base = 'Mariana Parfumes'
     document.title = route.meta.title ? `${t(route.meta.title)} — ${base}` : `${base} — ${t('meta.tagline')}`
 }
 

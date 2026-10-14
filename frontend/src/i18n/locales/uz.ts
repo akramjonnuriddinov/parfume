@@ -1,19 +1,18 @@
 const uz = {
     meta: {
-        tagline: 'original atirlar, flakon va raspiv',
+        tagline: 'premium atirlar, flakon va raspiv',
     },
     nav: {
         home: 'Bosh sahifa',
         catalog: 'Katalog',
         women: 'Ayollar uchun',
         men: 'Erkaklar uchun',
-        unisex: 'Uniseks',
         about: 'Biz haqimizda',
         delivery: 'Yetkazib berish',
         contact: 'Bog‘lanish',
     },
     header: {
-        homeLabel: 'Parfume Shop — bosh sahifa',
+        homeLabel: 'Mariana Parfumes — bosh sahifa',
         searchPlaceholder: 'Atir, brend yoki nota (masalan, vanil)',
         search: 'Qidirish',
         consultation: 'Atir tanlashda yordam',
@@ -25,7 +24,7 @@ const uz = {
         mobileMenu: 'Mobil menyu',
     },
     footer: {
-        about: 'Original atirlar: to‘liq flakon yoki sinab ko‘rish uchun raspiv. Toshkent bo‘ylab tez yetkazib beramiz.',
+        about: 'Premium sifatli atirlar: flakon yoki sinab ko‘rish uchun raspiv. O‘zbekiston bo‘ylab yetkazib beramiz.',
         information: 'Ma’lumotlar',
         telegram: 'Telegram orqali yozish',
     },
@@ -35,7 +34,19 @@ const uz = {
         gender: {
             women: 'Ayollar uchun',
             men: 'Erkaklar uchun',
-            unisex: 'Uniseks',
+            unisex: 'Ayol va erkak uchun',
+        },
+        tier: {
+            premium: 'Premium',
+            standart: 'Standart',
+            luxcopy: 'Lux copy',
+            tester: 'Tester',
+        },
+        tierInfo: {
+            premium: 'Eng yuqori sifat: hidi aslidek, turg‘unligi kuchli.',
+            standart: 'Hamyonbop variant: sifati premiumdan biroz farq qiladi, narxi ancha arzon.',
+            luxcopy: 'Sovg‘a uchun qulay: flakon va qadoq aslidek ishlangan.',
+            tester: 'Qadoqsiz flakon, narxi qulayroq.',
         },
         concentration: {
             edp: 'Eau de Parfum',
@@ -87,8 +98,8 @@ const uz = {
         volume: 'Hajm',
         chooseVolume: 'Hajmni tanlang',
         priceFrom: '{price} dan',
-        decantHint: 'Raspiv — original flakondan quyilgan kichik hajm. Atirni bir necha kun sinab ko‘rib, keyin to‘liq flakon olishingiz mumkin.',
-        perkOriginal: 'Faqat original, rasmiy yetkazuvchilardan',
+        decantHint: 'Raspiv — 6–10 ml kichik hajm. Atirni bir necha kun sinab ko‘rib, keyin katta flakon olishingiz mumkin.',
+        perkOriginal: 'Sifat darajasi ochiq ko‘rsatilgan: Premium, Standart yoki Lux copy',
         perkDelivery: 'Toshkent bo‘ylab 1 kunda yetkazish',
         notes: 'Hid piramidasi',
         notesTop: 'Yuqori notalar',
@@ -125,9 +136,9 @@ const uz = {
     },
     home: {
         hero: {
-            eyebrow: 'Original atirlar uyi',
-            title: 'Sizning hidingiz — sizning imzoingiz.',
-            text: 'Dunyoning mashhur atirlari: to‘liq flakon yoki avval sinab ko‘rish uchun 5–10 ml raspiv.',
+            eyebrow: 'Premium atirlar uyi',
+            title: 'Har tomchida san’at va sifat',
+            text: 'Dunyoning mashhur atirlari: to‘liq flakon yoki avval sinab ko‘rish uchun 6–10 ml raspiv.',
             cta: 'Katalogni ko‘rish',
             decants: 'Raspiv nima?',
         },
@@ -135,11 +146,10 @@ const uz = {
             title: 'Kim uchun tanlaysiz?',
             women: 'Ayollar uchun',
             men: 'Erkaklar uchun',
-            unisex: 'Uniseks',
             cta: 'Ko‘rish',
         },
         categories: {
-            title: 'Hid oilalari',
+            title: 'Atir oilalari',
             all: 'Barcha atirlar',
         },
         products: {
@@ -149,7 +159,7 @@ const uz = {
         decant: {
             eyebrow: 'Raspiv',
             title: 'Avval sinab ko‘ring, keyin flakon oling',
-            text: 'Raspiv — original flakondan steril shishachaga quyilgan 5–10 ml atir. Arzon, ixcham va sumkada olib yurish uchun qulay.',
+            text: 'Raspiv — steril shishachaga quyilgan 6–10 ml atir. Arzon, ixcham va sumkada olib yurish uchun qulay.',
             cta: 'Raspivlarni tanlash',
             steps: {
                 choose: { title: 'Tanlang', text: '2–3 ta yoqqan atirning raspivini oling.' },
@@ -168,15 +178,16 @@ const uz = {
     },
     catalog: {
         title: 'Katalog',
-        categories: 'Hid oilalari',
+        categories: 'Atir oilalari',
         all: 'Barchasi',
         gender: 'Kim uchun',
         brand: 'Brend',
         allBrands: 'Barcha brendlar',
+        tier: 'Sifat',
+        allTiers: 'Barcha sifatlar',
         forGender: {
             women: 'Ayollar atirlari',
             men: 'Erkaklar atirlari',
-            unisex: 'Uniseks atirlar',
         },
         searchResults: '«{q}» bo‘yicha natijalar',
         found: 'Topildi: {n} ta',
@@ -211,10 +222,10 @@ const uz = {
     },
     about: {
         title: 'Biz haqimizda',
-        lead: 'Parfume Shop — dunyoning mashhur atirlarini to‘liq flakon va raspivda sotadigan do‘kon.',
+        lead: 'Mariana Parfumes — dunyoning mashhur atirlarini to‘liq flakon va raspivda sotadigan do‘kon.',
         missionTitle: 'Har kimga o‘z hidi',
         missionText:
-            'Yaxshi atir qimmat xato bo‘lmasligi kerak. Shuning uchun har bir atirni raspivda sinab ko‘rish imkonini beramiz, mos hidni tanlashda maslahat beramiz va faqat original mahsulot sotamiz.',
+            'Yaxshi atir qimmat xato bo‘lmasligi kerak. Shuning uchun har bir atirni raspivda sinab ko‘rish imkonini beramiz, mos hidni tanlashda maslahat beramiz va har bir atirning sifat darajasini ochiq aytamiz.',
         stats: [
             { value: '150+', label: 'atir turi' },
             { value: '5–10 ml', label: 'raspiv hajmi' },
@@ -222,7 +233,7 @@ const uz = {
         ],
         valuesTitle: 'Nega bizni tanlashadi',
         values: [
-            { title: 'Faqat original', text: 'Atirlar rasmiy distribyutorlardan, partiya kodi bilan.' },
+            { title: 'Ochiq sifat', text: 'Premium, Standart yoki Lux copy — nima olayotganingizni aniq bilasiz.' },
             { title: 'Avval sinab ko‘ring', text: 'Har bir atirning raspivi bor — flakon olishdan oldin sinab ko‘rasiz.' },
             { title: 'Shaxsiy maslahat', text: 'Hidlar bo‘yicha mutaxassisimiz sizga mos atirni tanlab beradi.' },
             { title: 'Sovg‘a qadoqlash', text: 'Bayram va sovg‘alar uchun chiroyli qadoqlab beramiz.' },
@@ -286,9 +297,9 @@ const uz = {
     chat: {
         launcher: 'AI maslahatchi',
         open: 'AI maslahatchini ochish',
-        title: 'Parfume Shop maslahatchisi',
+        title: 'Mariana Parfumes maslahatchisi',
         subtitle: 'AI · atir tanlash va buyurtmada yordam beradi',
-        greeting: 'Assalomu alaykum! Men Parfume Shop AI maslahatchisiman. Kim uchun va qanday hid izlayotganingizni yozing — mos atirlarni topib, xohlasangiz savatga qo‘shib beraman.',
+        greeting: 'Assalomu alaykum! Men Mariana Parfumes AI maslahatchisiman. Kim uchun va qanday hid izlayotganingizni yozing — mos atirlarni topib, xohlasangiz savatga qo‘shib beraman.',
         suggestionsTitle: 'Masalan, so‘rang:',
         suggestions: {
             gift: 'Ayolimga sovg‘a uchun shirin atir kerak, 1 mln so‘mgacha',
@@ -322,6 +333,7 @@ const uz = {
             price: 'Narx',
             gender: 'Kim uchun',
             concentration: 'Konsentratsiya',
+            tier: 'Sifat',
             notes: 'Notalar',
         },
         order: {
@@ -348,7 +360,7 @@ const uz = {
             dashboard: 'Boshqaruv paneli',
             orders: 'Buyurtmalar',
             products: 'Atirlar',
-            categories: 'Hid oilalari',
+            categories: 'Atir oilalari',
             messages: 'Xabarlar',
             chats: 'AI suhbatlar',
             settings: 'Sozlamalar',
@@ -417,7 +429,7 @@ const uz = {
             allCategories: 'Barcha oilalar',
             empty: 'Atirlar yo‘q',
             product: 'Atir',
-            category: 'Hid oilasi',
+            category: 'Atir oilasi',
             noCategory: 'Oilasiz',
             price: 'Narx',
             priceSum: 'Narx (so‘m)',
@@ -438,6 +450,8 @@ const uz = {
             brandPlaceholder: 'Masalan, Dior',
             gender: 'Kim uchun',
             concentration: 'Konsentratsiya',
+            tier: 'Sifat darajasi',
+            tierNone: 'Ko‘rsatilmagan',
             variants: 'Hajmlar va narxlar',
             variantsHint: 'Har bir hajm alohida sotiladi: to‘liq flakon yoki raspiv (5–10 ml).',
             variantsRequired: 'Kamida bitta hajm qo‘shing',
@@ -460,10 +474,10 @@ const uz = {
             failed: 'Rasmni yuklab bo‘lmadi',
         },
         categories: {
-            hint: 'Hid oilalari katalog filtri va bosh sahifada ko‘rsatiladi.',
+            hint: 'Atir oilalari katalog filtri va bosh sahifada ko‘rsatiladi.',
             new: 'Yangi oila',
             edit: 'Oilani tahrirlash',
-            empty: 'Hid oilalari yo‘q',
+            empty: 'Atir oilalari yo‘q',
             name: 'Nomi',
             description: 'Tavsif',
             nameRequired: 'Nomini kiriting',

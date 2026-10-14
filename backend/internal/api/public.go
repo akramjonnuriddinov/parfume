@@ -23,6 +23,7 @@ func productFilterFromQuery(r *http.Request) store.ProductFilter {
 		CategorySlug: clean(q.Get("category")),
 		Gender:       q.Get("gender"),
 		Brand:        clean(q.Get("brand")),
+		Tier:         q.Get("tier"),
 		Query:        clean(q.Get("q")),
 		Featured:     q.Get("featured") == "1" || q.Get("featured") == "true",
 		Sort:         q.Get("sort"),

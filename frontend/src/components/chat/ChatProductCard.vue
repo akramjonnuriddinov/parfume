@@ -57,7 +57,9 @@ function addToCart(): void {
         </RouterLink>
 
         <div class="flex min-w-0 flex-1 flex-col">
-            <p class="truncate text-[10px] font-medium tracking-wider text-gold uppercase">{{ product.brand }}</p>
+            <p class="truncate text-[10px] font-medium tracking-wider text-gold uppercase">
+                {{ product.brand }}<template v-if="product.tier"> · {{ perfume.tier(product.tier) }}</template>
+            </p>
             <RouterLink
                 :to="link"
                 class="line-clamp-1 text-sm leading-5 font-medium text-ink hover:text-brand"

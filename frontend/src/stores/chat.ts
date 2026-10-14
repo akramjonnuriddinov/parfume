@@ -13,8 +13,8 @@ import {
 import type { Locale, Localized, VariantKind } from '../api/types'
 import { useCartStore } from './cart'
 
-const STORAGE_KEY = 'parfumeshop-chat'
-const SESSION_KEY = 'parfumeshop-chat-session'
+const STORAGE_KEY = 'mariana-chat'
+const SESSION_KEY = 'mariana-chat-session'
 const MAX_STORED = 40
 
 /** A cart change made by the assistant, shown as a chip under its reply. */

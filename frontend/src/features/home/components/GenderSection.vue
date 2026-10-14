@@ -1,4 +1,4 @@
-<!-- GenderSection.vue — "for her / for him / unisex" entry tiles -->
+<!-- GenderSection.vue — "for her / for him" entry tiles -->
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
@@ -11,7 +11,6 @@ const emit = defineEmits<{ select: [gender: Gender] }>()
 const tiles = computed(() => [
     { gender: 'women' as const, image: '/images/perfumes/rose.svg', bg: 'bg-[#f8ecea]' },
     { gender: 'men' as const, image: '/images/perfumes/blue.svg', bg: 'bg-[#e9eef3]' },
-    { gender: 'unisex' as const, image: '/images/perfumes/amber.svg', bg: 'bg-[#f5ede1]' },
 ])
 </script>
 
@@ -27,7 +26,7 @@ const tiles = computed(() => [
             >
                 {{ t('home.gender.title') }}
             </h2>
-            <div class="mt-8 grid gap-4 sm:grid-cols-3">
+            <div class="mt-8 grid gap-4 sm:grid-cols-2">
                 <button
                     v-for="tile in tiles"
                     :key="tile.gender"

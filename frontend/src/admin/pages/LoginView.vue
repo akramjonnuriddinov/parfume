@@ -1,5 +1,6 @@
 <!-- LoginView.vue -->
 <script setup lang="ts">
+import AppLogo from '../../components/AppLogo.vue'
 import { computed, reactive, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
@@ -56,15 +57,7 @@ async function submit(): Promise<void> {
                     to="/"
                     class="inline-flex items-center gap-2.5 text-ink"
                 >
-                    <span
-                        class="flex size-10 items-center justify-center rounded-xl bg-brand text-gold"
-                        aria-hidden="true"
-                    >
-                        <svg class="size-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
-                            <path d="M9.5 3h5v3.5h-5zM10.5 6.5v2M13.5 6.5v2M7 9h10a1.5 1.5 0 0 1 1.5 1.5v9A1.5 1.5 0 0 1 17 21H7a1.5 1.5 0 0 1-1.5-1.5v-9A1.5 1.5 0 0 1 7 9ZM9 15h6" />
-                        </svg>
-                    </span>
-                    <span class="text-2xl font-semibold tracking-tight">Parfume<span class="text-gold"> Shop</span></span>
+                    <AppLogo height="h-16" />
                 </RouterLink>
 
                 <h1 class="mt-8 text-2xl font-medium tracking-tight text-ink">{{ t('admin.login.title') }}</h1>

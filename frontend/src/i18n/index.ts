@@ -4,7 +4,7 @@ import uz from './locales/uz'
 import ru from './locales/ru'
 import en from './locales/en'
 
-const STORAGE_KEY = 'parfumeshop-locale'
+const STORAGE_KEY = 'mariana-locale'
 
 export const LOCALES: { code: Locale; label: string; short: string }[] = [
     { code: 'uz', label: 'O‘zbekcha', short: 'UZ' },

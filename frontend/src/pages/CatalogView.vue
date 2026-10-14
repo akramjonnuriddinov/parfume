@@ -4,7 +4,7 @@ import { computed, onMounted, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
 import { publicApi } from '../api/public'
-import { GENDERS, type Brand, type Product } from '../api/types'
+import { SHOP_GENDERS, TIERS, type Brand, type Product } from '../api/types'
 import PageIntro from '../components/PageIntro.vue'
 import ProductCard from '../components/ProductCard.vue'
 import ProductCardSkeleton from '../components/ProductCardSkeleton.vue'
@@ -31,6 +31,7 @@ const category = computed(() => (typeof route.query.category === 'string' ? rout
 const q = computed(() => (typeof route.query.q === 'string' ? route.query.q : ''))
 const gender = computed(() => (typeof route.query.gender === 'string' ? route.query.gender : ''))
 const brand = computed(() => (typeof route.query.brand === 'string' ? route.query.brand : ''))
+const tier = computed(() => (typeof route.query.tier === 'string' ? route.query.tier : ''))
 const sort = computed(() => (typeof route.query.sort === 'string' ? route.query.sort : ''))
 const page = computed(() => Math.max(1, Number(route.query.page) || 1))
 
@@ -38,7 +39,7 @@ const activeCategory = computed(() => categories.items.find((c) => c.slug === ca
 const title = computed(() => {
     if (activeCategory.value) return tr(activeCategory.value)
     if (brand.value) return brand.value
-    if (gender.value === 'women' || gender.value === 'men' || gender.value === 'unisex') return t(`catalog.forGender.${gender.value}`)
+    if (gender.value === 'women' || gender.value === 'men') return t(`catalog.forGender.${gender.value}`)
     return t('catalog.title')
 })
 
@@ -55,6 +56,7 @@ function updateQuery(patch: Record<string, string | number | undefined>): void {
         category: category.value,
         gender: gender.value,
         brand: brand.value,
+        tier: tier.value,
         q: q.value,
         sort: sort.value,
         page: undefined,
@@ -76,6 +78,7 @@ async function load(): Promise<void> {
             category: category.value || undefined,
             gender: gender.value || undefined,
             brand: brand.value || undefined,
+            tier: tier.value || undefined,
             q: q.value || undefined,
             sort: sort.value || undefined,
             page: page.value,
@@ -140,36 +143,52 @@ watch(() => route.fullPath, load, { immediate: true })
 
             <!-- Filtr qatori -->
             <div class="mt-6 flex flex-col gap-3 border-b border-line pb-5 lg:flex-row lg:items-center lg:justify-between">
-                <p class="text-sm text-muted">
+                <p class="text-sm text-muted lg:shrink-0">
                     <template v-if="q">
                         {{ t('catalog.searchResults', { q }) }} ·
                     </template>
                     {{ t('catalog.found', { n: total }) }}
                     <button
-                        v-if="q || brand || gender"
+                        v-if="q || brand || gender || tier"
                         type="button"
                         class="ml-2 cursor-pointer text-brand underline-offset-4 hover:underline"
-                        @click="updateQuery({ q: undefined, brand: undefined, gender: undefined })"
+                        @click="updateQuery({ q: undefined, brand: undefined, gender: undefined, tier: undefined })"
                     >
                         {{ t('catalog.clearSearch') }}
                     </button>
                 </p>
 
-                <div class="flex flex-col gap-3 sm:flex-row sm:items-center">
+                <div class="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center lg:justify-end">
                 <el-radio-group
+                    class="shrink-0 flex-nowrap!"
                     :model-value="gender"
                     :aria-label="t('catalog.gender')"
                     @update:model-value="updateQuery({ gender: ($event as string) || undefined })"
                 >
                     <el-radio-button value="">{{ t('catalog.all') }}</el-radio-button>
                     <el-radio-button
-                        v-for="g in GENDERS"
+                        v-for="g in SHOP_GENDERS"
                         :key="g"
                         :value="g"
                     >
                         {{ perfume.gender(g) }}
                     </el-radio-button>
                 </el-radio-group>
+                <el-select
+                    :model-value="tier || undefined"
+                    clearable
+                    class="w-full! sm:w-40!"
+                    :placeholder="t('catalog.allTiers')"
+                    :aria-label="t('catalog.tier')"
+                    @update:model-value="updateQuery({ tier: $event || undefined })"
+                >
+                    <el-option
+                        v-for="x in TIERS"
+                        :key="x"
+                        :value="x"
+                        :label="perfume.tier(x)"
+                    />
+                </el-select>
                 <el-select
                     :model-value="brand || undefined"
                     filterable
@@ -261,6 +280,7 @@ watch(() => route.fullPath, load, { immediate: true })
                 <el-pagination
                     background
                     layout="prev, pager, next"
+                    :pager-count="5"
                     :total="total"
                     :page-size="PAGE_SIZE"
                     :current-page="page"

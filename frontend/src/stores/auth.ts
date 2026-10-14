@@ -3,7 +3,7 @@ import { computed, ref } from 'vue'
 import { adminApi } from '../api/admin'
 import type { Admin } from '../api/types'
 
-const STORAGE_KEY = 'parfumeshop-admin-token'
+const STORAGE_KEY = 'mariana-admin-token'
 
 function loadToken(): string | null {
     try {

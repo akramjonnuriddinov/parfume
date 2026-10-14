@@ -28,6 +28,12 @@ export type CategoryInput = Omit<
 
 export type Gender = 'women' | 'men' | 'unisex'
 export const GENDERS: Gender[] = ['women', 'men', 'unisex']
+/** Storefront filters: perfumes for both show up under each. */
+export const SHOP_GENDERS: Gender[] = ['women', 'men']
+
+/** Quality tier the shop sells the scent in; '' = not set. */
+export type Tier = '' | 'premium' | 'standart' | 'luxcopy' | 'tester'
+export const TIERS: Exclude<Tier, ''>[] = ['premium', 'standart', 'luxcopy', 'tester']
 
 export type Concentration = 'edp' | 'edt' | 'parfum' | 'extrait' | 'cologne' | 'oil'
 export const CONCENTRATIONS: Concentration[] = ['edp', 'edt', 'parfum', 'extrait', 'cologne', 'oil']
@@ -54,6 +60,7 @@ export interface Product extends Localized {
     brand: string
     gender: Gender
     concentration: Concentration
+    tier: Tier
     notes_top: string
     notes_heart: string
     notes_base: string

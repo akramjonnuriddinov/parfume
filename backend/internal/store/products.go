@@ -13,6 +13,7 @@ var (
 	Genders        = []string{"women", "men", "unisex"}
 	Concentrations = []string{"edp", "edt", "parfum", "extrait", "cologne", "oil"}
 	VariantKinds   = []string{"bottle", "decant"}
+	Tiers          = []string{"premium", "standart", "luxcopy", "tester"}
 )
 
 func oneOf(v string, list []string) bool {
@@ -27,6 +28,7 @@ func oneOf(v string, list []string) bool {
 func ValidGender(s string) bool        { return oneOf(s, Genders) }
 func ValidConcentration(s string) bool { return oneOf(s, Concentrations) }
 func ValidVariantKind(s string) bool   { return oneOf(s, VariantKinds) }
+func ValidTier(s string) bool          { return oneOf(s, Tiers) }
 
 type CategoryRef struct {
 	ID     int64  `json:"id"`
@@ -59,6 +61,7 @@ type Product struct {
 	Brand         string       `json:"brand"`
 	Gender        string       `json:"gender"`
 	Concentration string       `json:"concentration"`
+	Tier          string       `json:"tier"`
 	NotesTop      string       `json:"notes_top"`
 	NotesHeart    string       `json:"notes_heart"`
 	NotesBase     string       `json:"notes_base"`
@@ -94,6 +97,7 @@ type ProductInput struct {
 	Brand         string         `json:"brand"`
 	Gender        string         `json:"gender"`
 	Concentration string         `json:"concentration"`
+	Tier          string         `json:"tier"`
 	NotesTop      string         `json:"notes_top"`
 	NotesHeart    string         `json:"notes_heart"`
 	NotesBase     string         `json:"notes_base"`
@@ -110,6 +114,7 @@ type ProductFilter struct {
 	CategorySlug string
 	Gender       string
 	Brand        string
+	Tier         string
 	Query        string
 	Featured     bool
 	IDs          []int64
@@ -120,7 +125,7 @@ type ProductFilter struct {
 
 const productSelect = `
 	SELECT p.id, p.category_id, p.name_uz, p.name_ru, p.name_en,
-		p.description_uz, p.description_ru, p.description_en, p.brand, p.gender, p.concentration,
+		p.description_uz, p.description_ru, p.description_en, p.brand, p.gender, p.concentration, p.tier,
 		p.notes_top, p.notes_heart, p.notes_base,
 		p.image_url, p.is_active, p.is_featured, p.sort_order,
 		p.created_at, p.updated_at,
@@ -140,7 +145,7 @@ func scanProduct(row scanner) (Product, error) {
 	var cID *int64
 	var cSlug, cUz, cRu, cEn *string
 	err := row.Scan(&p.ID, &p.CategoryID, &p.NameUz, &p.NameRu, &p.NameEn,
-		&p.DescriptionUz, &p.DescriptionRu, &p.DescriptionEn, &p.Brand, &p.Gender, &p.Concentration,
+		&p.DescriptionUz, &p.DescriptionRu, &p.DescriptionEn, &p.Brand, &p.Gender, &p.Concentration, &p.Tier,
 		&p.NotesTop, &p.NotesHeart, &p.NotesBase,
 		&p.ImageURL, &p.IsActive, &p.IsFeatured, &p.SortOrder,
 		&p.CreatedAt, &p.UpdatedAt,
@@ -220,6 +225,9 @@ func (s *Store) ListProducts(ctx context.Context, f ProductFilter) (Page[Product
 	}
 	if b := strings.TrimSpace(f.Brand); b != "" {
 		where = append(where, "lower(p.brand) = lower("+arg(b)+")")
+	}
+	if ValidTier(f.Tier) {
+		where = append(where, "p.tier = "+arg(f.Tier))
 	}
 	if f.Featured {
 		where = append(where, "p.is_featured")
@@ -324,11 +332,11 @@ func (s *Store) CreateProduct(ctx context.Context, in ProductInput) (Product, er
 		if err := tx.QueryRow(ctx, `
 			INSERT INTO products (category_id, name_uz, name_ru, name_en, description_uz, description_ru,
 				description_en, brand, gender, concentration, notes_top, notes_heart, notes_base,
-				image_url, is_active, is_featured, sort_order)
-			VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17) RETURNING id`,
+				image_url, is_active, is_featured, sort_order, tier)
+			VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18) RETURNING id`,
 			in.CategoryID, in.NameUz, in.NameRu, in.NameEn, in.DescriptionUz, in.DescriptionRu,
 			in.DescriptionEn, in.Brand, in.Gender, in.Concentration, in.NotesTop, in.NotesHeart, in.NotesBase,
-			in.ImageURL, in.IsActive, in.IsFeatured, in.SortOrder).Scan(&id); err != nil {
+			in.ImageURL, in.IsActive, in.IsFeatured, in.SortOrder, in.Tier).Scan(&id); err != nil {
 			return err
 		}
 		return saveVariants(ctx, tx, id, in.Variants)
@@ -345,11 +353,11 @@ func (s *Store) UpdateProduct(ctx context.Context, id int64, in ProductInput) (P
 			UPDATE products SET category_id = $2, name_uz = $3, name_ru = $4, name_en = $5,
 				description_uz = $6, description_ru = $7, description_en = $8, brand = $9, gender = $10,
 				concentration = $11, notes_top = $12, notes_heart = $13, notes_base = $14,
-				image_url = $15, is_active = $16, is_featured = $17, sort_order = $18, updated_at = now()
+				image_url = $15, is_active = $16, is_featured = $17, sort_order = $18, tier = $19, updated_at = now()
 			WHERE id = $1`,
 			id, in.CategoryID, in.NameUz, in.NameRu, in.NameEn, in.DescriptionUz, in.DescriptionRu,
 			in.DescriptionEn, in.Brand, in.Gender, in.Concentration, in.NotesTop, in.NotesHeart, in.NotesBase,
-			in.ImageURL, in.IsActive, in.IsFeatured, in.SortOrder)
+			in.ImageURL, in.IsActive, in.IsFeatured, in.SortOrder, in.Tier)
 		if err != nil {
 			return err
 		}

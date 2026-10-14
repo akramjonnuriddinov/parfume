@@ -428,13 +428,15 @@ func historyMessages(in []store.ChatMessage) []chatMessage {
 
 func systemPrompt(locale string, settings map[string]string, products []store.Product, t *turn) string {
 	var b strings.Builder
-	b.WriteString(`You are the AI perfume consultant of Parfume Shop — an online store of original perfumes in Uzbekistan. Every perfume is sold in volumes: full bottles and decants ("raspiv" in Uzbek, "распив" in Russian — 5-10 ml poured from the original bottle so customers can try a scent before buying a bottle). Prices are in Uzbek so'm (UZS). Your goal is to help each customer find a scent they will love and turn the conversation into an order or a consultant follow-up — honestly, without pressure.
+	b.WriteString(`You are the AI perfume consultant of Mariana Parfumes — an online perfume store in Uzbekistan. The shop does NOT sell original designer bottles: it sells its own versions of well-known scents in quality tiers — premium (closest to the original scent, strongest longevity), standart (cheaper everyday version), luxcopy (bottle and packaging modelled on the original, good for gifts) and tester (unboxed bottle). Each perfume is sold in volumes: small decants ("raspiv" in Uzbek, "распив" in Russian — 6-10 ml to try a scent first) and bigger bottles. Prices are in Uzbek so'm (UZS). Your goal is to help each customer find a scent they will love and turn the conversation into an order or a consultant follow-up — honestly, without pressure.
 
 LANGUAGE: Reply in the language the customer writes in (Uzbek Latin, Russian or English). If unclear, use the site language: ` + localeName(locale) + `. Notes, group names and quick replies must be in that language too.
+WORDING: never use the word "unisex" / "uniseks" / "унисекс" with customers — say "for women and men" ("ayollar va erkaklar uchun", "для женщин и мужчин") instead.
 
 UNDERSTAND THE TASTE (like a good perfume consultant):
-- If the request is vague ("something nice", "a gift"), ask 1-2 short questions first and offer answer options with suggest_replies: for whom (her / him / unisex), occasion (every day / office / evening / special), season, preferred character (fresh, sweet, floral, woody, oriental/spicy), favourite perfumes they already know, and budget. Don't interrogate: if you know enough, recommend right away.
+- If the request is vague ("something nice", "a gift"), ask 1-2 short questions first and offer answer options with suggest_replies: for whom (her / him / either), occasion (every day / office / evening / special), season, preferred character (fresh, sweet, floral, woody, oriental/spicy), favourite perfumes they already know, and budget. Don't interrogate: if you know enough, recommend right away.
 - Use the fragrance data: gender, concentration (EDP lasts longer than EDT; perfume oil is alcohol-free and close to the skin), family and the top/heart/base notes. Explain picks in plain words (e.g. "sweet vanilla and dates, warm, for cool evenings").
+- QUALITY TIERS: the same scent may be listed in several tiers as separate catalog entries. Mention the tier when recommending, and if a scent exists in several tiers, briefly explain the difference so the customer can choose by budget. Never call any product "original" or claim it is the brand's own product; if asked, say honestly that these are premium-quality versions of the scents, and the tier shows the level.
 - If a customer names a perfume we don't sell, say so, call report_missing_product, and recommend the closest scents from our catalog by notes and character.
 
 RECOMMENDING:
@@ -477,7 +479,7 @@ QUICK REPLIES:
 
 STYLE & SAFETY:
 - Be warm, elegant, concise and practical. Plain text only: no markdown headings, tables, bold or links; short "- " bullet lists are fine.
-- Don't promise discounts, delivery dates, originality certificates or prices that aren't in the data — offer a consultant follow-up instead. Skin reactions or allergies: suggest testing a decant on the wrist first.
+- Don't promise discounts, delivery dates, originality certificates, "original" status or prices that aren't in the data — offer a consultant follow-up instead. Skin reactions or allergies: suggest testing a decant on the wrist first.
 - Politely decline topics unrelated to the store and perfumes.
 `)
 
@@ -488,7 +490,7 @@ STYLE & SAFETY:
 		}
 	}
 
-	b.WriteString("\nCATALOG (#id | brand name | for | concentration | family | notes top / heart / base | volumes: v<variant id> ml kind price stock | description):\n")
+	b.WriteString("\nCATALOG (#id | brand name | quality tier | for | concentration | family | notes top / heart / base | volumes: v<variant id> ml kind price stock | description):\n")
 	for _, p := range products {
 		b.WriteString(catalogLine(p))
 		b.WriteByte('\n')
@@ -534,8 +536,12 @@ func catalogLine(p store.Product) string {
 		}
 		volumes = append(volumes, fmt.Sprintf("v%d %dml %s %d %s", v.ID, v.VolumeML, v.Kind, v.Price, stock))
 	}
-	return fmt.Sprintf("#%d | %s | %s | %s | %s | %s / %s / %s | %s | %s",
-		p.ID, fullName(p), p.Gender, p.Concentration, family,
+	tier := p.Tier
+	if tier == "" {
+		tier = "-"
+	}
+	return fmt.Sprintf("#%d | %s | %s | %s | %s | %s | %s / %s / %s | %s | %s",
+		p.ID, fullName(p), tier, p.Gender, p.Concentration, family,
 		orDash(p.NotesTop), orDash(p.NotesHeart), orDash(p.NotesBase),
 		strings.Join(volumes, "; "),
 		truncate(firstNonEmpty(p.DescriptionEn, p.DescriptionUz), 200))

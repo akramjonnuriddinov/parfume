@@ -3,7 +3,7 @@ import { computed, ref, watch } from 'vue'
 import { publicApi } from '../api/public'
 import type { Product, Variant, VariantKind } from '../api/types'
 
-const STORAGE_KEY = 'parfumeshop-cart'
+const STORAGE_KEY = 'mariana-cart'
 
 /** One line per volume: the same perfume in 10 ml and 100 ml are two lines. */
 export interface CartItem {

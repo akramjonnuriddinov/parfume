@@ -13,6 +13,7 @@ export interface ProductQuery {
     category?: string
     gender?: string
     brand?: string
+    tier?: string
     q?: string
     featured?: boolean
     sort?: string

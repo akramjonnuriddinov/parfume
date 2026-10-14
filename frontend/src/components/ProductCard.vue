@@ -55,7 +55,8 @@ function addToCart(): void {
                 class="transition-transform duration-300 hover:scale-105"
             />
 
-            <span class="absolute top-3 left-3 rounded-md bg-white/90 px-2 py-1 text-[11px] font-medium text-muted">
+            <span v-if="product.gender !== 'unisex'"
+                class="absolute top-3 left-3 rounded-md bg-white/90 px-2 py-1 text-[11px] font-medium text-muted">
                 {{ perfume.gender(product.gender) }}
             </span>
             <span
@@ -79,7 +80,13 @@ function addToCart(): void {
                     {{ name }}
                 </RouterLink>
             </h3>
-            <p class="text-xs text-muted">{{ perfume.concentration(product.concentration) }}</p>
+            <p class="flex flex-wrap items-center gap-x-1.5 gap-y-1 text-xs text-muted">
+                <span
+                    v-if="product.tier"
+                    class="rounded border border-gold/40 bg-gold-soft px-1.5 py-px text-[10px] font-semibold tracking-wide text-ink uppercase"
+                >{{ perfume.tier(product.tier) }}</span>
+                {{ perfume.concentration(product.concentration) }}
+            </p>
 
             <div class="mt-auto pt-3">
                 <div

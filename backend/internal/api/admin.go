@@ -226,6 +226,8 @@ func validateProduct(in *store.ProductInput) string {
 		return "invalid gender"
 	case !store.ValidConcentration(in.Concentration):
 		return "invalid concentration"
+	case in.Tier != "" && !store.ValidTier(in.Tier):
+		return "invalid tier"
 	case !lengthBetween(in.NotesTop, 0, 500) || !lengthBetween(in.NotesHeart, 0, 500) || !lengthBetween(in.NotesBase, 0, 500):
 		return "notes are too long"
 	case len(in.ImageURL) > 1000:
