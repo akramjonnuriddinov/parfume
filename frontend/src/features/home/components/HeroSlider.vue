@@ -1,6 +1,6 @@
-<!-- HeroSlider.vue — swipeable photo slider; each slide opens its perfume -->
+<!-- HeroSlider.vue — crossfading photo card; each slide opens its perfume -->
 <script setup lang="ts">
-import { onBeforeUnmount, onMounted, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 
 const { t } = useI18n()
@@ -14,163 +14,163 @@ const slides = [
     { image: '/images/hero/aventus.webp', brand: 'Creed', name: 'Aventus', productId: 35 },
 ]
 
-const AUTOPLAY_MS = 4500
-
-const track = ref<HTMLElement | null>(null)
 const active = ref(0)
-// Where the slider is heading; differs from `active` while a smooth scroll
-// runs, so quick repeated clicks keep counting from the right slide.
-let target: number | null = null
-let timer: number | undefined
-let paused = false
-
-// Native scroll-snap does the swiping; we only follow and drive it.
-function onScroll(): void {
-    const el = track.value
-    if (!el) return
-    active.value = Math.round(el.scrollLeft / el.clientWidth)
-    if (target !== null && Math.abs(el.scrollLeft - target * el.clientWidth) < 2) target = null
-}
+const paused = ref(false)
+// Autoplay is driven by the progress bar's CSS animation: when it ends we
+// move on, so pausing the animation pauses the slider too.
+const autoplay = ref(false)
+const slide = computed(() => slides[active.value])
 
 function goTo(index: number): void {
-    const el = track.value
-    if (!el) return
-    target = (index + slides.length) % slides.length
-    el.scrollTo({ left: target * el.clientWidth, behavior: 'smooth' })
+    active.value = (index + slides.length) % slides.length
 }
 
-function current(): number {
-    return target ?? active.value
+let touchX: number | null = null
+
+function onTouchStart(e: TouchEvent): void {
+    touchX = e.touches[0]?.clientX ?? null
 }
 
-function start(): void {
-    stop()
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
-    timer = window.setInterval(() => {
-        if (!paused && !document.hidden) goTo(current() + 1)
-    }, AUTOPLAY_MS)
+function onTouchEnd(e: TouchEvent): void {
+    const endX = e.changedTouches[0]?.clientX
+    if (touchX === null || endX === undefined) return
+    const dx = endX - touchX
+    touchX = null
+    if (Math.abs(dx) > 40) {
+        e.preventDefault() // a swipe is not a tap on the link
+        goTo(active.value + (dx < 0 ? 1 : -1))
+    }
 }
 
-function stop(): void {
-    if (timer !== undefined) window.clearInterval(timer)
-    timer = undefined
-}
-
-function pause(value: boolean): void {
-    paused = value
-}
-
-// A swipe takes over from any scroll we started.
-function onTouch(): void {
-    target = null
-    start()
-}
-
-// After a manual move, give the visitor a full interval before moving on.
-function manual(index: number): void {
-    goTo(index)
-    start()
-}
-
-onMounted(start)
-onBeforeUnmount(stop)
+onMounted(() => {
+    autoplay.value = !window.matchMedia('(prefers-reduced-motion: reduce)').matches
+})
 </script>
 
 <template>
     <div
-        class="relative h-full min-h-[340px] overflow-hidden sm:min-h-[420px]"
+        class="flex items-center justify-center px-6 pt-2 pb-10 sm:px-10 lg:py-10"
         role="region"
         aria-roledescription="carousel"
         :aria-label="t('home.hero.slides')"
-        @mouseenter="pause(true)"
-        @mouseleave="pause(false)"
-        @focusin="pause(true)"
-        @focusout="pause(false)"
-        @touchstart.passive="onTouch"
+        @mouseenter="paused = true"
+        @mouseleave="paused = false"
+        @focusin="paused = true"
+        @focusout="paused = false"
     >
-        <div
-            ref="track"
-            class="hero-track flex h-full snap-x snap-mandatory overflow-x-auto"
-            @scroll.passive="onScroll"
-        >
-            <router-link
-                v-for="(slide, i) in slides"
-                :key="slide.productId"
-                :to="`/products/${slide.productId}`"
-                class="group relative block h-full w-full shrink-0 snap-center snap-always"
-                role="group"
-                aria-roledescription="slide"
-                :aria-label="`${slide.brand} ${slide.name}`"
-                :tabindex="i === active ? 0 : -1"
-            >
-                <img
-                    :src="slide.image"
-                    :alt="`${slide.brand} ${slide.name}`"
-                    class="absolute inset-0 h-full w-full object-cover"
-                    :loading="i === 0 ? 'eager' : 'lazy'"
-                    :fetchpriority="i === 0 ? 'high' : 'auto'"
-                    decoding="async"
-                    draggable="false"
+        <div class="w-full max-w-[270px] sm:max-w-[320px] lg:max-w-[310px]">
+            <div class="relative">
+                <!-- Orqadagi varaq -->
+                <span
+                    class="absolute inset-0 translate-x-4 translate-y-2 rotate-[4deg] rounded-2xl bg-white/70 shadow-sm"
+                    aria-hidden="true"
+                />
+
+                <router-link
+                    :to="`/products/${slide.productId}`"
+                    class="relative block aspect-[4/5] overflow-hidden rounded-2xl bg-white shadow-[0_24px_60px_-24px_rgba(28,28,28,0.45)] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand"
+                    :aria-label="`${slide.brand} ${slide.name}`"
+                    @touchstart.passive="onTouchStart"
+                    @touchend="onTouchEnd"
                 >
-                <span class="absolute bottom-14 left-4 flex items-center gap-3 rounded-xl bg-white/90 px-4 py-2.5 shadow-sm backdrop-blur-sm sm:left-6">
-                    <span class="flex flex-col">
-                        <span class="text-[11px] font-medium tracking-[0.14em] text-gold uppercase">{{ slide.brand }}</span>
-                        <span class="text-sm font-medium text-ink">{{ slide.name }}</span>
-                    </span>
-                    <span class="flex items-center gap-1 text-xs text-brand">
-                        {{ t('home.hero.view') }}
-                        <svg class="size-3.5 transition-transform group-hover:translate-x-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <img
+                        v-for="(s, i) in slides"
+                        :key="s.productId"
+                        :src="s.image"
+                        :alt="i === active ? `${s.brand} ${s.name}` : ''"
+                        class="absolute inset-0 h-full w-full object-cover transition-[opacity,transform] duration-[900ms] ease-out"
+                        :class="i === active ? 'scale-100 opacity-100' : 'scale-[1.04] opacity-0'"
+                        :loading="i === 0 ? 'eager' : 'lazy'"
+                        :fetchpriority="i === 0 ? 'high' : 'auto'"
+                        decoding="async"
+                        draggable="false"
+                    >
+                </router-link>
+            </div>
+
+            <!-- Nom va boshqaruv -->
+            <div class="mt-6 flex items-end justify-between gap-4">
+                <router-link
+                    :to="`/products/${slide.productId}`"
+                    class="group min-w-0"
+                    aria-live="polite"
+                >
+                    <span class="block truncate text-[11px] font-medium tracking-[0.18em] text-gold uppercase">{{ slide.brand }}</span>
+                    <span class="mt-1 flex items-center gap-1.5 text-lg font-medium text-ink">
+                        <span class="truncate">{{ slide.name }}</span>
+                        <svg class="size-4 shrink-0 text-muted transition-transform group-hover:translate-x-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                             <path d="M5 12h14m-6-6 6 6-6 6" />
                         </svg>
                     </span>
-                </span>
-            </router-link>
-        </div>
+                </router-link>
+                <div class="hidden shrink-0 gap-2 sm:flex">
+                    <button
+                        type="button"
+                        class="flex size-9 cursor-pointer items-center justify-center rounded-full border border-line text-ink transition-colors hover:border-ink"
+                        :aria-label="t('home.hero.prev')"
+                        @click="goTo(active - 1)"
+                    >
+                        <svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <path d="m15 6-6 6 6 6" />
+                        </svg>
+                    </button>
+                    <button
+                        type="button"
+                        class="flex size-9 cursor-pointer items-center justify-center rounded-full border border-line text-ink transition-colors hover:border-ink"
+                        :aria-label="t('home.hero.next')"
+                        @click="goTo(active + 1)"
+                    >
+                        <svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <path d="m9 6 6 6-6 6" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
 
-        <!-- Strelkalar (kompyuterda) -->
-        <button
-            type="button"
-            class="absolute top-1/2 left-3 hidden size-10 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full bg-white/85 text-ink shadow-sm transition hover:bg-white sm:flex"
-            :aria-label="t('home.hero.prev')"
-            @click="manual(current() - 1)"
-        >
-            <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <path d="m15 6-6 6 6 6" />
-            </svg>
-        </button>
-        <button
-            type="button"
-            class="absolute top-1/2 right-3 hidden size-10 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full bg-white/85 text-ink shadow-sm transition hover:bg-white sm:flex"
-            :aria-label="t('home.hero.next')"
-            @click="manual(current() + 1)"
-        >
-            <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <path d="m9 6 6 6-6 6" />
-            </svg>
-        </button>
-
-        <!-- Nuqtalar -->
-        <div class="absolute bottom-4 left-1/2 flex -translate-x-1/2 gap-2 rounded-full bg-black/25 px-3 py-2 backdrop-blur-sm">
-            <button
-                v-for="(slide, i) in slides"
-                :key="slide.productId"
-                type="button"
-                class="h-2 cursor-pointer rounded-full transition-all"
-                :class="i === active ? 'w-6 bg-white' : 'w-2 bg-white/60 hover:bg-white/80'"
-                :aria-label="t('home.hero.goTo', { n: i + 1 })"
-                :aria-current="i === active"
-                @click="manual(i)"
-            />
+            <!-- Jarayon chiziqlari -->
+            <div class="mt-4 flex gap-1.5">
+                <button
+                    v-for="(s, i) in slides"
+                    :key="s.productId"
+                    type="button"
+                    class="relative h-5 flex-1 cursor-pointer"
+                    :aria-label="t('home.hero.goTo', { n: i + 1 })"
+                    :aria-current="i === active"
+                    @click="goTo(i)"
+                >
+                    <span class="absolute inset-x-0 top-1/2 h-[2px] -translate-y-1/2 overflow-hidden rounded-full bg-ink/15">
+                        <!-- Distinct keys: a finished bar must never reuse the animated element. -->
+                        <span
+                            v-if="i === active && autoplay"
+                            :key="`run-${active}`"
+                            class="hero-progress absolute inset-y-0 left-0 bg-ink"
+                            :style="{ animationPlayState: paused ? 'paused' : 'running' }"
+                            @animationend="goTo(active + 1)"
+                        />
+                        <span
+                            v-else-if="i <= active"
+                            key="done"
+                            class="absolute inset-0 bg-ink"
+                        />
+                    </span>
+                </button>
+            </div>
         </div>
     </div>
 </template>
 
 <style scoped>
-.hero-track {
-    scrollbar-width: none;
+.hero-progress {
+    animation: hero-progress 5s linear forwards;
 }
 
-.hero-track::-webkit-scrollbar {
-    display: none;
+@keyframes hero-progress {
+    from {
+        width: 0;
+    }
+
+    to {
+        width: 100%;
+    }
 }
 </style>

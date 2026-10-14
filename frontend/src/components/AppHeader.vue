@@ -47,7 +47,7 @@ function submitSearch(): void {
 <template>
     <header class="sticky top-0 z-40 border-b border-line bg-white">
         <div
-            class="mx-auto flex max-w-[1240px] flex-wrap items-center gap-3 px-4 py-4 sm:gap-4 sm:px-6 lg:flex-nowrap lg:gap-8 lg:py-5"
+            class="mx-auto flex max-w-[1240px] flex-wrap items-center gap-3 px-4 py-4 sm:gap-4 sm:px-6 lg:flex-nowrap lg:gap-8 lg:py-3"
         >
             <!-- Logo -->
             <RouterLink
@@ -55,7 +55,7 @@ function submitSearch(): void {
                 class="mr-auto inline-flex shrink-0 items-center gap-2.5 rounded-md text-ink focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand lg:mr-0"
                 :aria-label="t('header.homeLabel')"
             >
-                <AppLogo height="h-11 sm:h-14" />
+                <AppLogo height="h-16 sm:h-16" />
             </RouterLink>
 
             <!-- Qidiruv -->
