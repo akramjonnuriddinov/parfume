@@ -15,6 +15,9 @@
     --color-surface: #faf9f7;
     --color-hero: #f4f1ec;
     --color-line: #e7e3dd;
+
+    /* Sarlavhadagi urg‘u so‘zi uchun */
+    --font-display: "Cormorant Garamond", Georgia, serif;
 }
 
 /* Element Plus ranglarini ham moslashtirish

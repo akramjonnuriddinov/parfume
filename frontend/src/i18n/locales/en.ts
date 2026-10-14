@@ -140,7 +140,8 @@ const en: Messages = {
     home: {
         hero: {
             eyebrow: 'House of premium perfumes',
-            title: 'Art and quality in every drop',
+            title: '{accent} and quality in every drop',
+            accent: 'Art',
             text: 'The world’s best-loved perfumes: a full bottle or a 6–10 ml decant to try first.',
             cta: 'Browse the catalog',
             decants: 'What is a decant?',
@@ -149,6 +150,12 @@ const en: Messages = {
             next: 'Next',
             goTo: 'Slide {n}',
             view: 'View',
+            stats: [
+                { value: '120+', label: 'perfumes in stock' },
+                { value: '6 ml', label: 'smallest decant' },
+                { value: '24/7', label: 'AI consultant' },
+                { value: 'Uzbekistan', label: 'nationwide delivery' },
+            ],
         },
         gender: {
             title: 'Who are you choosing for?',

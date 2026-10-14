@@ -22,8 +22,9 @@ const inquiry = useInquiryStore()
 const name = computed(() => tr(props.product))
 const link = computed(() => `/products/${props.product.id}`)
 
-// Cards show at most three volumes; the product page lists them all.
-const shownVariants = computed(() => props.product.variants.slice(0, 3))
+// Every volume is offered right on the card, so 50 or 100 ml bottles aren't
+// hidden behind the product page.
+const shownVariants = computed(() => props.product.variants)
 const selected = ref<Variant | undefined>()
 watch(
     () => props.product,

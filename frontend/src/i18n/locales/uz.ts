@@ -138,7 +138,8 @@ const uz = {
     home: {
         hero: {
             eyebrow: 'Premium atirlar uyi',
-            title: 'Har tomchida san’at va sifat',
+            title: 'Har tomchida {accent} va sifat',
+            accent: 'san’at',
             text: 'Dunyoning mashhur atirlari: to‘liq flakon yoki avval sinab ko‘rish uchun 6–10 ml raspiv.',
             cta: 'Katalogni ko‘rish',
             decants: 'Raspiv nima?',
@@ -147,6 +148,12 @@ const uz = {
             next: 'Keyingi',
             goTo: '{n}-slayd',
             view: 'Ko‘rish',
+            stats: [
+                { value: '120+', label: 'atir katalogda' },
+                { value: '6 ml', label: 'eng kichik raspiv' },
+                { value: '24/7', label: 'AI maslahatchi' },
+                { value: 'O‘zbekiston', label: 'bo‘ylab yetkazish' },
+            ],
         },
         gender: {
             title: 'Kim uchun tanlaysiz?',
