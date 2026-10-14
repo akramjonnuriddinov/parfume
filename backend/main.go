@@ -15,11 +15,15 @@ import (
 	"parfume/backend/internal/auth"
 	"parfume/backend/internal/config"
 	"parfume/backend/internal/database"
+	"parfume/backend/internal/storage"
 	"parfume/backend/internal/store"
 )
 
 func main() {
 	cfg := config.Load()
+	if err := cfg.Validate(); err != nil {
+		log.Fatalf("config: %v", err)
+	}
 	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
 	defer stop()
 
@@ -41,19 +45,21 @@ func main() {
 		log.Fatalf("ensure admin: %v", err)
 	}
 
-	if err := os.MkdirAll(cfg.UploadDir, 0o755); err != nil {
-		log.Fatalf("upload dir: %v", err)
+	files, err := storage.New(cfg.S3, cfg.UploadDir)
+	if err != nil {
+		log.Fatalf("storage: %v", err)
 	}
 
 	srv := &http.Server{
 		Addr: ":" + cfg.Port,
 		Handler: api.NewRouter(api.Options{
-			Store:       st,
-			Auth:        auth.NewManager(cfg.JWTSecret),
-			Assistant:   assistant.New(st, cfg.OpenAIAPIKey, cfg.OpenAIModel),
-			UploadDir:   cfg.UploadDir,
-			StaticDir:   cfg.StaticDir,
-			CORSOrigins: cfg.CORSOrigins,
+			Store:          st,
+			Auth:           auth.NewManager(cfg.JWTSecret),
+			Assistant:      assistant.New(st, cfg.OpenAIAPIKey, cfg.OpenAIModel),
+			Files:          files,
+			StaticDir:      cfg.StaticDir,
+			CORSOrigins:    cfg.CORSOrigins,
+			TrustedProxies: cfg.TrustedProxies,
 		}),
 		ReadHeaderTimeout: 10 * time.Second,
 	}

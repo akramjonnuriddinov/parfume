@@ -28,8 +28,8 @@ export type CategoryInput = Omit<
 
 export type Gender = 'women' | 'men' | 'unisex'
 export const GENDERS: Gender[] = ['women', 'men', 'unisex']
-/** Storefront filters: perfumes for both show up under each. */
-export const SHOP_GENDERS: Gender[] = ['women', 'men']
+/** Storefront filters: unisex perfumes also show up under women and men. */
+export const SHOP_GENDERS: Gender[] = ['women', 'men', 'unisex']
 
 /** Quality tier the shop sells the scent in; '' = not set. */
 export type Tier = '' | 'premium' | 'standart' | 'luxcopy' | 'tester'

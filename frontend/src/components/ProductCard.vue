@@ -55,7 +55,7 @@ function addToCart(): void {
                 class="transition-transform duration-300 hover:scale-105"
             />
 
-            <span v-if="product.gender !== 'unisex'"
+            <span
                 class="absolute top-3 left-3 rounded-md bg-white/90 px-2 py-1 text-[11px] font-medium text-muted">
                 {{ perfume.gender(product.gender) }}
             </span>

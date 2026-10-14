@@ -3,12 +3,17 @@ package api
 import (
 	"crypto/rand"
 	"encoding/hex"
+	"errors"
 	"io"
 	"net/http"
 	"os"
+	"path"
 	"path/filepath"
+	"strconv"
 	"strings"
 	"time"
+
+	"parfume/backend/internal/storage"
 )
 
 const maxUploadSize = 5 << 20
@@ -26,7 +31,7 @@ func (h *Handler) upload(w http.ResponseWriter, r *http.Request) {
 		writeError(w, http.StatusRequestEntityTooLarge, "file is too large (max 5MB)")
 		return
 	}
-	file, _, err := r.FormFile("file")
+	file, header, err := r.FormFile("file")
 	if err != nil {
 		writeError(w, http.StatusBadRequest, "file is required")
 		return
@@ -46,25 +51,51 @@ func (h *Handler) upload(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	sub := time.Now().Format("2006/01")
-	dir := filepath.Join(h.uploadDir, sub)
-	if err := os.MkdirAll(dir, 0o755); err != nil {
-		writeStoreError(w, err)
-		return
-	}
-	name := randomName() + ext
-	dst, err := os.Create(filepath.Join(dir, name))
-	if err != nil {
-		writeStoreError(w, err)
-		return
-	}
-	defer dst.Close()
-	if _, err := io.Copy(dst, file); err != nil {
+	key := time.Now().Format("2006/01") + "/" + randomName() + ext
+	if err := h.files.Put(r.Context(), key, file, header.Size, mimeTypes[ext]); err != nil {
 		writeStoreError(w, err)
 		return
 	}
 
-	writeJSON(w, http.StatusCreated, map[string]string{"url": "/uploads/" + sub + "/" + name})
+	writeJSON(w, http.StatusCreated, map[string]string{"url": "/uploads/" + key})
+}
+
+var mimeTypes = map[string]string{
+	".jpg":  "image/jpeg",
+	".png":  "image/png",
+	".webp": "image/webp",
+	".gif":  "image/gif",
+}
+
+// serveUpload streams a stored file from the disk or the bucket.
+func (h *Handler) serveUpload(w http.ResponseWriter, r *http.Request) {
+	key := strings.TrimPrefix(r.URL.Path, "/uploads/")
+	obj, err := h.files.Open(r.Context(), key)
+	if errors.Is(err, storage.ErrNotFound) {
+		http.NotFound(w, r)
+		return
+	}
+	if err != nil {
+		http.Error(w, "storage unavailable", http.StatusBadGateway)
+		return
+	}
+	defer obj.Close()
+
+	contentType := obj.ContentType
+	if ct, ok := mimeTypes[strings.ToLower(path.Ext(key))]; ok {
+		contentType = ct
+	}
+	if contentType == "" {
+		contentType = "application/octet-stream"
+	}
+	w.Header().Set("Content-Type", contentType)
+	w.Header().Set("Content-Length", strconv.FormatInt(obj.Size, 10))
+	w.Header().Set("Cache-Control", "public, max-age=604800")
+	w.Header().Set("X-Content-Type-Options", "nosniff")
+	if r.Method == http.MethodHead {
+		return
+	}
+	_, _ = io.Copy(w, obj)
 }
 
 func randomName() string {

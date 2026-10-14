@@ -32,6 +32,7 @@ const links = computed(() => [
     { label: t('nav.catalog'), to: '/catalog' },
     { label: t('nav.women'), to: '/catalog?gender=women' },
     { label: t('nav.men'), to: '/catalog?gender=men' },
+    { label: t('nav.unisex'), to: '/catalog?gender=unisex' },
     { label: t('nav.about'), to: '/about' },
     { label: t('nav.delivery'), to: '/delivery' },
     { label: t('nav.contact'), to: '/contact' },

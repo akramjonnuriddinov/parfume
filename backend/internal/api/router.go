@@ -10,6 +10,7 @@ import (
 
 	"parfume/backend/internal/assistant"
 	"parfume/backend/internal/auth"
+	"parfume/backend/internal/storage"
 	"parfume/backend/internal/store"
 )
 
@@ -17,20 +18,23 @@ type Handler struct {
 	store     *store.Store
 	auth      *auth.Manager
 	assistant *assistant.Assistant
-	uploadDir string
+	files     storage.Storage
 }
 
 type Options struct {
 	Store       *store.Store
 	Auth        *auth.Manager
 	Assistant   *assistant.Assistant
-	UploadDir   string
+	Files       storage.Storage
 	StaticDir   string
 	CORSOrigins []string
+	// TrustedProxies is how many proxies sit in front of the server; the
+	// client IP for rate limiting is then read from X-Forwarded-For.
+	TrustedProxies int
 }
 
 func NewRouter(opts Options) http.Handler {
-	h := &Handler{store: opts.Store, auth: opts.Auth, assistant: opts.Assistant, uploadDir: opts.UploadDir}
+	h := &Handler{store: opts.Store, auth: opts.Auth, assistant: opts.Assistant, files: opts.Files}
 
 	r := chi.NewRouter()
 	r.Use(middleware.RequestID)
@@ -43,9 +47,9 @@ func NewRouter(opts Options) http.Handler {
 		MaxAge:         300,
 	}))
 
-	writeLimiter := newRateLimiter(20, time.Minute)
-	loginLimiter := newRateLimiter(10, time.Minute)
-	chatLimiter := newRateLimiter(15, time.Minute)
+	writeLimiter := newRateLimiter(20, time.Minute, opts.TrustedProxies)
+	loginLimiter := newRateLimiter(10, time.Minute, opts.TrustedProxies)
+	chatLimiter := newRateLimiter(15, time.Minute, opts.TrustedProxies)
 
 	r.Route("/api", func(r chi.Router) {
 		// The assistant may call OpenAI several times per message.
@@ -120,12 +124,8 @@ func NewRouter(opts Options) http.Handler {
 		})
 	})
 
-	uploads := http.StripPrefix("/uploads/", http.FileServer(noListingFS{http.Dir(opts.UploadDir)}))
-	r.Get("/uploads/*", func(w http.ResponseWriter, req *http.Request) {
-		w.Header().Set("Cache-Control", "public, max-age=604800")
-		w.Header().Set("X-Content-Type-Options", "nosniff")
-		uploads.ServeHTTP(w, req)
-	})
+	r.Get("/uploads/*", h.serveUpload)
+	r.Head("/uploads/*", h.serveUpload)
 
 	if opts.StaticDir != "" {
 		r.Get("/*", spaHandler(opts.StaticDir).ServeHTTP)

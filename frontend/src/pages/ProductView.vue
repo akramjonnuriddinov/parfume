@@ -143,7 +143,7 @@ function buyNow(): void {
                         :alt="`${product.brand} ${name}`"
                         eager
                     />
-                    <span v-if="product.gender !== 'unisex'"
+                    <span
                         class="absolute top-4 left-4 rounded-md bg-white px-2.5 py-1 text-xs font-medium text-muted">
                         {{ perfume.gender(product.gender) }}
                     </span>

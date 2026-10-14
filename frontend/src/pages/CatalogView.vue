@@ -39,7 +39,7 @@ const activeCategory = computed(() => categories.items.find((c) => c.slug === ca
 const title = computed(() => {
     if (activeCategory.value) return tr(activeCategory.value)
     if (brand.value) return brand.value
-    if (gender.value === 'women' || gender.value === 'men') return t(`catalog.forGender.${gender.value}`)
+    if (gender.value === 'women' || gender.value === 'men' || gender.value === 'unisex') return t(`catalog.forGender.${gender.value}`)
     return t('catalog.title')
 })
 
@@ -142,8 +142,8 @@ watch(() => route.fullPath, load, { immediate: true })
             </div>
 
             <!-- Filtr qatori -->
-            <div class="mt-6 flex flex-col gap-3 border-b border-line pb-5 lg:flex-row lg:items-center lg:justify-between">
-                <p class="text-sm text-muted lg:shrink-0">
+            <div class="mt-6 flex flex-col-reverse gap-3 border-b border-line pb-5">
+                <p class="text-sm text-muted">
                     <template v-if="q">
                         {{ t('catalog.searchResults', { q }) }} ·
                     </template>
@@ -158,22 +158,24 @@ watch(() => route.fullPath, load, { immediate: true })
                     </button>
                 </p>
 
-                <div class="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center lg:justify-end">
-                <el-radio-group
-                    class="shrink-0 flex-nowrap!"
-                    :model-value="gender"
-                    :aria-label="t('catalog.gender')"
-                    @update:model-value="updateQuery({ gender: ($event as string) || undefined })"
-                >
-                    <el-radio-button value="">{{ t('catalog.all') }}</el-radio-button>
-                    <el-radio-button
-                        v-for="g in SHOP_GENDERS"
-                        :key="g"
-                        :value="g"
+                <div class="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
+                <div class="-mx-4 overflow-x-auto px-4 sm:mx-0 sm:shrink-0 sm:overflow-visible sm:px-0">
+                    <el-radio-group
+                        class="flex-nowrap!"
+                        :model-value="gender"
+                        :aria-label="t('catalog.gender')"
+                        @update:model-value="updateQuery({ gender: ($event as string) || undefined })"
                     >
-                        {{ perfume.gender(g) }}
-                    </el-radio-button>
-                </el-radio-group>
+                        <el-radio-button value="">{{ t('catalog.all') }}</el-radio-button>
+                        <el-radio-button
+                            v-for="g in SHOP_GENDERS"
+                            :key="g"
+                            :value="g"
+                        >
+                            {{ perfume.gender(g) }}
+                        </el-radio-button>
+                    </el-radio-group>
+                </div>
                 <el-select
                     :model-value="tier || undefined"
                     clearable

@@ -9,6 +9,7 @@ const en: Messages = {
         catalog: 'Catalog',
         women: 'For women',
         men: 'For men',
+        unisex: 'Unisex',
         about: 'About us',
         delivery: 'Delivery',
         contact: 'Contact',
@@ -36,7 +37,7 @@ const en: Messages = {
         gender: {
             women: 'For women',
             men: 'For men',
-            unisex: 'For him and her',
+            unisex: 'Unisex',
         },
         tier: {
             premium: 'Premium',
@@ -148,6 +149,7 @@ const en: Messages = {
             title: 'Who are you choosing for?',
             women: 'For women',
             men: 'For men',
+            unisex: 'Unisex',
             cta: 'Browse',
         },
         categories: {
@@ -190,6 +192,7 @@ const en: Messages = {
         forGender: {
             women: 'Women’s perfumes',
             men: 'Men’s perfumes',
+            unisex: 'Unisex perfumes',
         },
         searchResults: 'Results for “{q}”',
         found: 'Found: {n}',

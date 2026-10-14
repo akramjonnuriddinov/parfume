@@ -9,6 +9,7 @@ const ru: Messages = {
         catalog: 'Каталог',
         women: 'Для женщин',
         men: 'Для мужчин',
+        unisex: 'Унисекс',
         about: 'О нас',
         delivery: 'Доставка',
         contact: 'Контакты',
@@ -36,7 +37,7 @@ const ru: Messages = {
         gender: {
             women: 'Для женщин',
             men: 'Для мужчин',
-            unisex: 'Для женщин и мужчин',
+            unisex: 'Унисекс',
         },
         tier: {
             premium: 'Премиум',
@@ -148,6 +149,7 @@ const ru: Messages = {
             title: 'Для кого выбираете?',
             women: 'Для женщин',
             men: 'Для мужчин',
+            unisex: 'Унисекс',
             cta: 'Смотреть',
         },
         categories: {
@@ -190,6 +192,7 @@ const ru: Messages = {
         forGender: {
             women: 'Женские ароматы',
             men: 'Мужские ароматы',
+            unisex: 'Унисекс ароматы',
         },
         searchResults: 'Результаты по запросу «{q}»',
         found: 'Найдено: {n}',

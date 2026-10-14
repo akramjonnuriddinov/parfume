@@ -7,6 +7,7 @@ const uz = {
         catalog: 'Katalog',
         women: 'Ayollar uchun',
         men: 'Erkaklar uchun',
+        unisex: 'Uniseks',
         about: 'Biz haqimizda',
         delivery: 'Yetkazib berish',
         contact: 'Bog‘lanish',
@@ -34,7 +35,7 @@ const uz = {
         gender: {
             women: 'Ayollar uchun',
             men: 'Erkaklar uchun',
-            unisex: 'Ayol va erkak uchun',
+            unisex: 'Uniseks',
         },
         tier: {
             premium: 'Premium',
@@ -146,6 +147,7 @@ const uz = {
             title: 'Kim uchun tanlaysiz?',
             women: 'Ayollar uchun',
             men: 'Erkaklar uchun',
+            unisex: 'Uniseks',
             cta: 'Ko‘rish',
         },
         categories: {
@@ -188,6 +190,7 @@ const uz = {
         forGender: {
             women: 'Ayollar atirlari',
             men: 'Erkaklar atirlari',
+            unisex: 'Uniseks atirlar',
         },
         searchResults: '«{q}» bo‘yicha natijalar',
         found: 'Topildi: {n} ta',
