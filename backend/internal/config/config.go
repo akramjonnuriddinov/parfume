@@ -26,6 +26,7 @@ type Config struct {
 	Production     bool
 	S3             storage.S3Config
 	TrustedProxies int
+	ClientIPHeader string
 }
 
 func Load() Config {
@@ -51,6 +52,7 @@ func Load() Config {
 			SecretKey: env("AWS_SECRET_ACCESS_KEY", ""),
 		},
 		TrustedProxies: envInt("TRUSTED_PROXIES", 0),
+		ClientIPHeader: env("CLIENT_IP_HEADER", ""),
 	}
 }
 

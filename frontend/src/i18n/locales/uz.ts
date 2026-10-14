@@ -142,6 +142,11 @@ const uz = {
             text: 'Dunyoning mashhur atirlari: to‘liq flakon yoki avval sinab ko‘rish uchun 6–10 ml raspiv.',
             cta: 'Katalogni ko‘rish',
             decants: 'Raspiv nima?',
+            slides: 'Tanlangan atirlar',
+            prev: 'Oldingi',
+            next: 'Keyingi',
+            goTo: '{n}-slayd',
+            view: 'Ko‘rish',
         },
         gender: {
             title: 'Kim uchun tanlaysiz?',

@@ -60,6 +60,7 @@ func main() {
 			StaticDir:      cfg.StaticDir,
 			CORSOrigins:    cfg.CORSOrigins,
 			TrustedProxies: cfg.TrustedProxies,
+			ClientIPHeader: cfg.ClientIPHeader,
 		}),
 		ReadHeaderTimeout: 10 * time.Second,
 	}

@@ -1,6 +1,7 @@
 <!-- HeroSection.vue -->
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
+import HeroSlider from './HeroSlider.vue'
 
 const { t } = useI18n()
 
@@ -48,29 +49,8 @@ const emit = defineEmits<{
                     </div>
                 </div>
 
-                <!-- Flakonlar kompozitsiyasi -->
-                <div
-                    class="relative flex min-h-[280px] items-end justify-center gap-2 px-6 pb-10 sm:min-h-[340px] lg:min-h-0 lg:px-10"
-                    aria-hidden="true"
-                >
-                    <span class="absolute inset-x-10 bottom-10 h-24 rounded-[50%] bg-brand/10 blur-2xl" />
-                    <img
-                        src="/images/perfumes/rose.svg"
-                        alt=""
-                        class="relative w-28 -rotate-6 sm:w-36 lg:w-40"
-                    >
-                    <img
-                        src="/images/perfumes/gold.svg"
-                        alt=""
-                        class="relative z-10 w-40 sm:w-52 lg:w-60"
-                        fetchpriority="high"
-                    >
-                    <img
-                        src="/images/perfumes/amber.svg"
-                        alt=""
-                        class="relative w-28 rotate-6 sm:w-36 lg:w-40"
-                    >
-                </div>
+                <!-- Atirlar slayderi -->
+                <HeroSlider />
             </div>
         </div>
     </section>

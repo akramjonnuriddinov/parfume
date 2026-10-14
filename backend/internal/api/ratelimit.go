@@ -15,6 +15,7 @@ type rateLimiter struct {
 	limit   int
 	window  time.Duration
 	proxies int
+	header  string
 	hits    map[string]*windowCount
 }
 
@@ -23,8 +24,8 @@ type windowCount struct {
 	count int
 }
 
-func newRateLimiter(limit int, window time.Duration, proxies int) *rateLimiter {
-	rl := &rateLimiter{limit: limit, window: window, proxies: proxies, hits: map[string]*windowCount{}}
+func newRateLimiter(limit int, window time.Duration, proxies int, header string) *rateLimiter {
+	rl := &rateLimiter{limit: limit, window: window, proxies: proxies, header: header, hits: map[string]*windowCount{}}
 	go func() {
 		for range time.Tick(window) {
 			rl.mu.Lock()
@@ -53,7 +54,7 @@ func (rl *rateLimiter) allow(ip string) bool {
 
 func (rl *rateLimiter) Middleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if !rl.allow(clientIP(r, rl.proxies)) {
+		if !rl.allow(clientIP(r, rl.header, rl.proxies)) {
 			writeError(w, http.StatusTooManyRequests, "too many requests")
 			return
 		}
@@ -62,10 +63,16 @@ func (rl *rateLimiter) Middleware(next http.Handler) http.Handler {
 }
 
 // clientIP returns the visitor's address. Behind proxies every request comes
-// from the proxy, so the address is taken from X-Forwarded-For instead: each
-// proxy appends the address it saw, so the entry `proxies` places from the
-// end was written by the outermost trusted proxy and can't be forged.
-func clientIP(r *http.Request, proxies int) string {
+// from the proxy, so the address is taken from a header the edge sets (e.g.
+// Cloudflare's CF-Connecting-IP), or else from X-Forwarded-For: each proxy
+// appends the address it saw, so the entry `proxies` places from the end was
+// written by the outermost trusted proxy and can't be forged.
+func clientIP(r *http.Request, header string, proxies int) string {
+	if header != "" {
+		if ip := strings.TrimSpace(r.Header.Get(header)); ip != "" {
+			return ip
+		}
+	}
 	if proxies > 0 {
 		var hops []string
 		for _, h := range r.Header.Values("X-Forwarded-For") {

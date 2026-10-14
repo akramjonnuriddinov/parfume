@@ -144,6 +144,11 @@ const en: Messages = {
             text: 'The world’s best-loved perfumes: a full bottle or a 6–10 ml decant to try first.',
             cta: 'Browse the catalog',
             decants: 'What is a decant?',
+            slides: 'Featured perfumes',
+            prev: 'Previous',
+            next: 'Next',
+            goTo: 'Slide {n}',
+            view: 'View',
         },
         gender: {
             title: 'Who are you choosing for?',

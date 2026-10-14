@@ -31,6 +31,9 @@ type Options struct {
 	// TrustedProxies is how many proxies sit in front of the server; the
 	// client IP for rate limiting is then read from X-Forwarded-For.
 	TrustedProxies int
+	// ClientIPHeader, when set, names a header holding the client IP that
+	// the edge in front of the server overwrites (CF-Connecting-IP).
+	ClientIPHeader string
 }
 
 func NewRouter(opts Options) http.Handler {
@@ -47,9 +50,9 @@ func NewRouter(opts Options) http.Handler {
 		MaxAge:         300,
 	}))
 
-	writeLimiter := newRateLimiter(20, time.Minute, opts.TrustedProxies)
-	loginLimiter := newRateLimiter(10, time.Minute, opts.TrustedProxies)
-	chatLimiter := newRateLimiter(15, time.Minute, opts.TrustedProxies)
+	writeLimiter := newRateLimiter(20, time.Minute, opts.TrustedProxies, opts.ClientIPHeader)
+	loginLimiter := newRateLimiter(10, time.Minute, opts.TrustedProxies, opts.ClientIPHeader)
+	chatLimiter := newRateLimiter(15, time.Minute, opts.TrustedProxies, opts.ClientIPHeader)
 
 	r.Route("/api", func(r chi.Router) {
 		// The assistant may call OpenAI several times per message.
